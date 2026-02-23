@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Xsihad Perehodnik</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            background: #0a000a; 
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow-x: hidden; /* Защита от горизонтальной прокрутки */
+        }
+
+        #bgCanvas { 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            width: 100%;
+            height: 100%;
+            z-index: 1; 
+            pointer-events: none;
+        }
+        
+        .container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 600px; /* Увеличил, чтобы тексту было просторнее */
+            padding: 20px;
+            text-align: center;
+            margin: 0 auto; /* Жесткая центровка по горизонтали */
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            /* Адаптивный размер шрифта */
+            font-size: clamp(1.4rem, 6vw, 2.8rem);
+            margin-bottom: 40px;
+            text-transform: uppercase;
+            font-weight: 900;
+            
+            /* Перелив: Розовый -> Фиолетовый -> Розовый */
+            background: linear-gradient(90deg, #ff00ff, #7a00ff, #ff00ff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pink-purple-flow 3s linear infinite;
+            
+            /* Центровка и отступы для буквы К */
+            display: block;
+            width: 100%;
+            padding: 10px 0; 
+            filter: drop-shadow(0 0 12px rgba(255, 0, 255, 0.4));
+            word-wrap: break-word; /* Если не влезет — перенесется, а не уедет вправо */
+        }
+
+        @keyframes pink-purple-flow {
+            to { background-position: 200% center; }
+        }
+
+        .links-box {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+            width: 100%;
+        }
+
+        .btn {
+            width: 100%;
+            max-width: 320px;
+            padding: 16px 25px;
+            border: 2px solid rgba(255, 0, 255, 0.2);
+            background: rgba(15, 0, 15, 0.85);
+            color: #fff;
+            text-decoration: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: 0.3s ease;
+            border-radius: 50px;
+            backdrop-filter: blur(8px);
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .btn:hover {
+            background: #ff00ff;
+            color: #000;
+            border-color: #ff00ff;
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
+            transform: translateY(-2px);
+        }
+
+        .btn i { font-size: 18px; }
+    </style>
+</head>
+<body>
+
+<canvas id="bgCanvas"></canvas>
+
+<div class="container">
+    <h1>XSIHAD PEREHODNIK</h1>
+    <div class="links-box">
+        <a href="https://on.soundcloud.com/abkO9K2IpEaL3LpPoL" target="_blank" class="btn"><span>first SK playlist</span> <i class="fab fa-soundcloud"></i></a>
+        <a href="https://on.soundcloud.com/tJnVHXL7XTtuijTy0E" target="_blank" class="btn"><span>second SK playlist</span> <i class="fab fa-soundcloud"></i></a>
+        <a href="https://t.me/xsihadtgk" target="_blank" class="btn"><span>my TGK</span> <i class="fab fa-telegram"></i></a>
+        <a href="https://t.me/xsihadlifetgk" target="_blank" class="btn"><span>my life TGK</span> <i class="fab fa-telegram-plane"></i></a>
+        <a href="https://t.me/XSIHADboti" target="_blank" class="btn"><span>my BOTS</span> <i class="fas fa-robot"></i></a>
+        <a href="https://www.tiktok.com/@xsihad" target="_blank" class="btn"><span>my TT</span> <i class="fab fa-tiktok"></i></a>
+    </div>
+</div>
+
+<script>
+    const canvas = document.getElementById('bgCanvas');
+    const ctx = canvas.getContext('2d');
+    let w, h, stars = [], petals = [];
+
+    function init() {
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        
+        stars = Array.from({length: 70}, () => ({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            size: Math.random() * 1.5,
+            alpha: Math.random(),
+            speed: Math.random() * 0.01 + 0.005
+        }));
+
+        petals = Array.from({length: 25}, () => ({
+            x: Math.random() * w,
+            y: Math.random() * h,
+            s: Math.random() * 3 + 4, // Размер лепестков (средний)
+            v: Math.random() * 0.8 + 0.4,
+            a: Math.random() * 360,
+            swing: Math.random() * 1.2
+        }));
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, w, h);
+        
+        stars.forEach(s => {
+            s.alpha += s.speed;
+            if (s.alpha > 1 || s.alpha < 0) s.speed *= -1;
+            ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.1, s.alpha)})`;
+            ctx.beginPath();
+            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+            ctx.fill();
+        });
+
+        petals.forEach(p => {
+            p.y += p.v;
+            p.x += Math.sin(p.y / 60) * p.swing;
+            p.a += 0.5;
+            if (p.y > h + 20) { p.y = -20; p.x = Math.random() * w; }
+            
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.a * Math.PI / 180);
+            ctx.fillStyle = "#ffb7c5";
+            ctx.beginPath();
+            ctx.ellipse(0, 0, p.s, p.s/1.5, 0, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        });
+
+        requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', init);
+    init();
+    draw();
+</script>
+
+</body>
+</html>
