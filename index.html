@@ -17,7 +17,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            overflow-x: hidden; /* Защита от горизонтальной прокрутки */
+            overflow-x: hidden; /* Г‡Г Г№ГЁГІГ  Г®ГІ ГЈГ®Г°ГЁГ§Г®Г­ГІГ Г«ГјГ­Г®Г© ГЇГ°Г®ГЄГ°ГіГІГЄГЁ */
         }
 
         #bgCanvas { 
@@ -34,33 +34,33 @@
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 600px; /* Увеличил, чтобы тексту было просторнее */
+            max-width: 600px; /* Г“ГўГҐГ«ГЁГ·ГЁГ«, Г·ГІГ®ГЎГ» ГІГҐГЄГ±ГІГі ГЎГ»Г«Г® ГЇГ°Г®Г±ГІГ®Г°Г­ГҐГҐ */
             padding: 20px;
             text-align: center;
-            margin: 0 auto; /* Жесткая центровка по горизонтали */
+            margin: 0 auto; /* Г†ГҐГ±ГІГЄГ Гї Г¶ГҐГ­ГІГ°Г®ГўГЄГ  ГЇГ® ГЈГ®Г°ГЁГ§Г®Г­ГІГ Г«ГЁ */
         }
 
         h1 {
             font-family: 'Orbitron', sans-serif;
-            /* Адаптивный размер шрифта */
+            /* ГЂГ¤Г ГЇГІГЁГўГ­Г»Г© Г°Г Г§Г¬ГҐГ° ГёГ°ГЁГґГІГ  */
             font-size: clamp(1.4rem, 6vw, 2.8rem);
             margin-bottom: 40px;
             text-transform: uppercase;
             font-weight: 900;
             
-            /* Перелив: Розовый -> Фиолетовый -> Розовый */
+            /* ГЏГҐГ°ГҐГ«ГЁГў: ГђГ®Г§Г®ГўГ»Г© -> Г”ГЁГ®Г«ГҐГІГ®ГўГ»Г© -> ГђГ®Г§Г®ГўГ»Г© */
             background: linear-gradient(90deg, #ff00ff, #7a00ff, #ff00ff);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             animation: pink-purple-flow 3s linear infinite;
             
-            /* Центровка и отступы для буквы К */
+            /* Г–ГҐГ­ГІГ°Г®ГўГЄГ  ГЁ Г®ГІГ±ГІГіГЇГ» Г¤Г«Гї ГЎГіГЄГўГ» ГЉ */
             display: block;
             width: 100%;
             padding: 10px 0; 
             filter: drop-shadow(0 0 12px rgba(255, 0, 255, 0.4));
-            word-wrap: break-word; /* Если не влезет — перенесется, а не уедет вправо */
+            word-wrap: break-word; /* Г…Г±Г«ГЁ Г­ГҐ ГўГ«ГҐГ§ГҐГІ вЂ” ГЇГҐГ°ГҐГ­ГҐГ±ГҐГІГ±Гї, Г  Г­ГҐ ГіГҐГ¤ГҐГІ ГўГЇГ°Г ГўГ® */
         }
 
         @keyframes pink-purple-flow {
@@ -140,7 +140,7 @@
         petals = Array.from({length: 25}, () => ({
             x: Math.random() * w,
             y: Math.random() * h,
-            s: Math.random() * 3 + 4, // Размер лепестков (средний)
+            s: Math.random() * 3 + 4, // ГђГ Г§Г¬ГҐГ° Г«ГҐГЇГҐГ±ГІГЄГ®Гў (Г±Г°ГҐГ¤Г­ГЁГ©)
             v: Math.random() * 0.8 + 0.4,
             a: Math.random() * 360,
             swing: Math.random() * 1.2
