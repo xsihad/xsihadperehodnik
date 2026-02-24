@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xsihad Perehodnik</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -14,173 +14,260 @@
             color: #fff;
             font-family: 'Segoe UI', sans-serif;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow-x: hidden; /* Çàùèòà îò ãîðèçîíòàëüíîé ïðîêðóòêè */
+            overflow: hidden;
         }
 
         #bgCanvas { 
             position: fixed; 
-            top: 0; 
-            left: 0; 
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; 
+            width: 100%; height: 100%;
             z-index: 1; 
+        }
+
+        /* --- ЭКРАН ИНТРО --- */
+        #intro-screen {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            background: rgba(10, 0, 10, 0.6);
+        }
+
+        .intro-text {
+            font-family: 'Orbitron', sans-serif;
+            font-size: clamp(2rem, 10vw, 4rem);
+            color: #ff00ff;
+            text-transform: uppercase;
+            font-weight: 900;
+            opacity: 0;
+            letter-spacing: 40px;
+            filter: blur(20px);
+            /* Сначала сборка (3 сек), затем бесконечная пульсация */
+            animation: assemble 3s ease-out forwards, pulse 2s infinite ease-in-out 3s;
+        }
+
+        /* Анимация сборки */
+        @keyframes assemble {
+            0% { opacity: 0; letter-spacing: 40px; filter: blur(20px); transform: scale(0.8); }
+            100% { opacity: 1; letter-spacing: 4px; filter: blur(0); transform: scale(1); }
+        }
+
+        /* Анимация пульсации */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Анимация разлета при взрыве */
+        .explode-out {
+            animation: disperse 0.7s ease-in forwards !important;
+        }
+
+        @keyframes disperse {
+            0% { opacity: 1; letter-spacing: 4px; filter: blur(0); transform: scale(1); }
+            100% { opacity: 0; letter-spacing: 80px; filter: blur(10px); transform: scale(3); }
+        }
+
+        #explosion-flash {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: #fff;
+            z-index: 1001;
+            opacity: 0;
             pointer-events: none;
         }
-        
-        .container {
+
+        /* --- ОСНОВНОЕ МЕНЮ --- */
+        #main-content {
+            opacity: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
             position: relative;
             z-index: 10;
+        }
+
+        .container {
             width: 100%;
-            max-width: 600px; /* Óâåëè÷èë, ÷òîáû òåêñòó áûëî ïðîñòîðíåå */
+            max-width: 500px;
             padding: 20px;
             text-align: center;
-            margin: 0 auto; /* Æåñòêàÿ öåíòðîâêà ïî ãîðèçîíòàëè */
         }
 
         h1 {
             font-family: 'Orbitron', sans-serif;
-            /* Àäàïòèâíûé ðàçìåð øðèôòà */
             font-size: clamp(1.4rem, 6vw, 2.8rem);
             margin-bottom: 40px;
             text-transform: uppercase;
             font-weight: 900;
-            
-            /* Ïåðåëèâ: Ðîçîâûé -> Ôèîëåòîâûé -> Ðîçîâûé */
             background: linear-gradient(90deg, #ff00ff, #7a00ff, #ff00ff);
             background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            animation: pink-purple-flow 3s linear infinite;
-            
-            /* Öåíòðîâêà è îòñòóïû äëÿ áóêâû Ê */
-            display: block;
-            width: 100%;
-            padding: 10px 0; 
-            filter: drop-shadow(0 0 12px rgba(255, 0, 255, 0.4));
-            word-wrap: break-word; /* Åñëè íå âëåçåò — ïåðåíåñåòñÿ, à íå óåäåò âïðàâî */
+            animation: flow 3s linear infinite;
         }
 
-        @keyframes pink-purple-flow {
-            to { background-position: 200% center; }
-        }
+        @keyframes flow { to { background-position: 200% center; } }
 
-        .links-box {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            align-items: center;
-            width: 100%;
-        }
+        .links-box { display: flex; flex-direction: column; gap: 12px; align-items: center; width: 100%; }
 
         .btn {
-            width: 100%;
-            max-width: 320px;
-            padding: 16px 25px;
+            width: 100%; max-width: 360px;
+            padding: 12px 20px;
             border: 2px solid rgba(255, 0, 255, 0.2);
             background: rgba(15, 0, 15, 0.85);
             color: #fff;
             text-decoration: none;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            transition: 0.3s ease;
-            border-radius: 50px;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 15px;
             backdrop-filter: blur(8px);
-            font-weight: 600;
-            font-size: 14px;
         }
 
         .btn:hover {
-            background: #ff00ff;
-            color: #000;
+            background: rgba(255, 0, 255, 0.1);
             border-color: #ff00ff;
-            box-shadow: 0 0 25px rgba(255, 0, 255, 0.5);
-            transform: translateY(-2px);
+            transform: scale(1.03);
         }
 
-        .btn i { font-size: 18px; }
+        .icon-circle {
+            width: 45px; height: 45px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 15px; flex-shrink: 0;
+            border: 1px solid rgba(255, 0, 255, 0.2);
+        }
+
+        .icon-circle i { font-size: 20px; color: #ff00ff; }
+        .text-info { display: flex; flex-direction: column; text-align: left; }
+        
+        /* Шрифт Orbitron на кнопках */
+        .user-text { 
+            font-family: 'Orbitron', sans-serif;
+            font-size: 13px; 
+            font-weight: 700; 
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        .app-name { font-size: 11px; color: rgba(255, 255, 255, 0.4); text-transform: uppercase; margin-top: 2px; }
     </style>
 </head>
 <body>
 
 <canvas id="bgCanvas"></canvas>
 
-<div class="container">
-    <h1>XSIHAD PEREHODNIK</h1>
-    <div class="links-box">
-        <a href="https://on.soundcloud.com/abkO9K2IpEaL3LpPoL" target="_blank" class="btn"><span>first SK playlist</span> <i class="fab fa-soundcloud"></i></a>
-        <a href="https://on.soundcloud.com/tJnVHXL7XTtuijTy0E" target="_blank" class="btn"><span>second SK playlist</span> <i class="fab fa-soundcloud"></i></a>
-        <a href="https://t.me/xsihadtgk" target="_blank" class="btn"><span>my TGK</span> <i class="fab fa-telegram"></i></a>
-        <a href="https://t.me/xsihadlifetgk" target="_blank" class="btn"><span>my life TGK</span> <i class="fab fa-telegram-plane"></i></a>
-        <a href="https://t.me/XSIHADboti" target="_blank" class="btn"><span>my BOTS</span> <i class="fas fa-robot"></i></a>
-        <a href="https://www.tiktok.com/@xsihad" target="_blank" class="btn"><span>my TT</span> <i class="fab fa-tiktok"></i></a>
+<div id="intro-screen">
+    <div class="intro-text" id="introText">by xsihad</div>
+</div>
+
+<div id="explosion-flash"></div>
+
+<div id="main-content">
+    <div class="container">
+        <h1>XSIHAD PEREHODNIK</h1>
+        <div class="links-box">
+            <a href="https://on.soundcloud.com/abkO9K2IpEaL3LpPoL" target="_blank" class="btn">
+                <div class="icon-circle"><i class="fab fa-soundcloud"></i></div>
+                <div class="text-info"><span class="user-text">first SK playlist</span><span class="app-name">SoundCloud</span></div>
+            </a>
+            <a href="https://on.soundcloud.com/tJnVHXL7XTtuijTy0E" target="_blank" class="btn">
+                <div class="icon-circle"><i class="fab fa-soundcloud"></i></div>
+                <div class="text-info"><span class="user-text">second SK playlist</span><span class="app-name">SoundCloud</span></div>
+            </a>
+            <a href="https://t.me/xsihadtgk" target="_blank" class="btn">
+                <div class="icon-circle"><i class="fab fa-telegram"></i></div>
+                <div class="text-info"><span class="user-text">my TGK</span><span class="app-name">Telegram</span></div>
+            </a>
+            <a href="https://t.me/xsihadlifetgk" target="_blank" class="btn">
+                <div class="icon-circle"><i class="fab fa-telegram-plane"></i></div>
+                <div class="text-info"><span class="user-text">my life TGK</span><span class="app-name">Telegram</span></div>
+            </a>
+            <a href="https://t.me/XSIHADboti" target="_blank" class="btn">
+                <div class="icon-circle"><i class="fas fa-robot"></i></div>
+                <div class="text-info"><span class="user-text">my BOTS</span><span class="app-name">Telegram Bot</span></div>
+            </a>
+            <a href="https://www.tiktok.com/@xsihad" target="_blank" class="btn">
+                <div class="icon-circle"><i class="fab fa-tiktok"></i></div>
+                <div class="text-info"><span class="user-text">my TT</span><span class="app-name">TikTok</span></div>
+            </a>
+        </div>
     </div>
 </div>
 
 <script>
     const canvas = document.getElementById('bgCanvas');
     const ctx = canvas.getContext('2d');
+    const introText = document.getElementById('introText');
+    const introScreen = document.getElementById('intro-screen');
+    const mainContent = document.getElementById('main-content');
+    const flash = document.getElementById('explosion-flash');
+
     let w, h, stars = [], petals = [];
 
-    function init() {
+    function resize() {
         w = canvas.width = window.innerWidth;
         h = canvas.height = window.innerHeight;
-        
-        stars = Array.from({length: 70}, () => ({
-            x: Math.random() * w,
-            y: Math.random() * h,
-            size: Math.random() * 1.5,
-            alpha: Math.random(),
-            speed: Math.random() * 0.01 + 0.005
-        }));
+    }
 
+    function initBg() {
+        stars = Array.from({length: 80}, () => ({
+            x: Math.random() * w, y: Math.random() * h,
+            size: Math.random() * 1.5, alpha: Math.random(),
+            speed: Math.random() * 0.02
+        }));
         petals = Array.from({length: 25}, () => ({
-            x: Math.random() * w,
-            y: Math.random() * h,
-            s: Math.random() * 3 + 4, // Ðàçìåð ëåïåñòêîâ (ñðåäíèé)
-            v: Math.random() * 0.8 + 0.4,
-            a: Math.random() * 360,
-            swing: Math.random() * 1.2
+            x: Math.random() * w, y: Math.random() * h,
+            s: Math.random() * 3 + 4, v: Math.random() * 0.8 + 0.4,
+            a: Math.random() * 360, swing: Math.random() * 1.5
         }));
     }
 
-    function draw() {
+    function animate() {
         ctx.clearRect(0, 0, w, h);
-        
         stars.forEach(s => {
             s.alpha += s.speed;
             if (s.alpha > 1 || s.alpha < 0) s.speed *= -1;
             ctx.fillStyle = `rgba(255, 255, 255, ${Math.max(0.1, s.alpha)})`;
-            ctx.beginPath();
-            ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2); ctx.fill();
         });
-
         petals.forEach(p => {
-            p.y += p.v;
-            p.x += Math.sin(p.y / 60) * p.swing;
-            p.a += 0.5;
+            p.y += p.v; p.x += Math.sin(p.y / 50) * p.swing; p.a += 0.8;
             if (p.y > h + 20) { p.y = -20; p.x = Math.random() * w; }
-            
-            ctx.save();
-            ctx.translate(p.x, p.y);
-            ctx.rotate(p.a * Math.PI / 180);
-            ctx.fillStyle = "#ffb7c5";
-            ctx.beginPath();
-            ctx.ellipse(0, 0, p.s, p.s/1.5, 0, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
+            ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.a * Math.PI / 180);
+            ctx.fillStyle = "#ffb7c5"; ctx.beginPath();
+            ctx.ellipse(0, 0, p.s, p.s/1.5, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
         });
-
-        requestAnimationFrame(draw);
+        requestAnimationFrame(animate);
     }
 
-    window.addEventListener('resize', init);
-    init();
-    draw();
+    // --- Переход через 5 секунд ---
+    setTimeout(() => {
+        introText.classList.add('explode-out');
+        setTimeout(() => {
+            flash.style.opacity = '1';
+            setTimeout(() => {
+                introScreen.style.display = 'none';
+                mainContent.style.display = 'flex';
+                setTimeout(() => { mainContent.style.opacity = '1'; }, 50);
+                flash.style.transition = 'opacity 0.8s ease';
+                flash.style.opacity = '0';
+            }, 100);
+        }, 500); 
+    }, 5000); 
+
+    window.addEventListener('resize', resize);
+    resize();
+    initBg();
+    animate();
 </script>
 
 </body>
